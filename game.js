@@ -16,6 +16,9 @@ var tcp;
 udpDataChannel.onopen = e => udp = true;
 tcpDataChannel.onopen = e => tcp = true;
 
+var tekst = document.getElementById("tekst")
+tekst.innerHTML = "hoi";
+
 peerConnection.oniceconnectionstatechange = e => {
     if (peerConnection.iceConnectionState == "connected"){
         console.log(peerConnection.iceConnectionState)
@@ -35,10 +38,10 @@ let createAnswer = () => {
     peerConnection.ondatachannel = e => {
         if (e.channel.label === "udpChannel") {
             udpDataChannel = e.channel;
-            udpDataChannel.onmessage = e => alert(e.data);
+            udpDataChannel.onmessage = e => tekst.innerHTML(e.data);
         } else if (e.channel.label === "tcpChannel") {
             tcpDataChannel = e.channel;
-            udpDataChannel.onmessage = e => alert(e.data);
+            udpDataChannel.onmessage = e => tekst.innerHTML(e.data);
         }
     };
     peerConnection.setRemoteDescription(offer);
