@@ -16,8 +16,8 @@ peerConnection.oniceconnectionstatechange = e => {
 
 let createOffer = () => {
     peerConnection.onicecandidate = e => {if (e.candidate === null) document.getElementById('offer-sdp').value = JSON.stringify(peerConnection.localDescription)};
-    udpDataChannel.onmessage = e => console.log("UDP message received: " + e.data);
-    tcpDataChannel.onmessage = e => console.log("TCP message received: " + e.data);
+    udpDataChannel.onmessage = e => alert(e.data);
+    tcpDataChannel.onmessage = e => alert(e.data);
     peerConnection.createOffer().then(offer => peerConnection.setLocalDescription(offer));
 }
 
@@ -27,10 +27,10 @@ let createAnswer = () => {
     peerConnection.ondatachannel = e => {
         if (e.channel.label === "udpChannel") {
             udpDataChannel = e.channel;
-            udpDataChannel.onmessage = e => console.log("UDP message received: " + e.data);
+            udpDataChannel.onmessage = e => alert(e.data);
         } else if (e.channel.label === "tcpChannel") {
             tcpDataChannel = e.channel;
-            tcpDataChannel.onmessage = e => console.log("TCP message received: " + e.data);
+            udpDataChannel.onmessage = e => alert(e.data);
         }
     };
     peerConnection.setRemoteDescription(offer);
