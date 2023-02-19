@@ -7,7 +7,11 @@ let createOffer = () => {
     udpDataChannel.onmessage = e => {
         partnerPosition = JSON.parse(e.data);
     };
-    udpDataChannel.onopen = e => mainAnimation();
+    udpDataChannel.onopen = e => {
+        alert("UDP data channel opened!");
+        mainAnimation();
+    };
+
     tcpDataChannel.onmessage = e => console.log(e.data);
     peerConnection.createOffer().then(offer => peerConnection.setLocalDescription(offer));
 }
@@ -21,7 +25,10 @@ let createAnswer = () => {
             udpDataChannel.onmessage = e => {
                 partnerPosition = JSON.parse(e.data);
             };
-            udpDataChannel.onopen = e => mainAnimation();
+            udpDataChannel.onopen = e => {
+                alert("UDP data channel opened!");
+                mainAnimation();
+            };
         } else if (e.channel.label === "tcpChannel") {
             tcpDataChannel = e.channel;
             tcpDataChannel.onmessage = e => console.log(e.data);
@@ -110,7 +117,7 @@ var render = function () {
     context.fillStyle = "#F7FF0F";
     context.fillRect(partnerPosition.x, partnerPosition.y, 50, 50);
 
-    context.fillStyle = "#FF5733";
+    context.fillStyle = "#800097";
     context.fillRect(localPosition.x, localPosition.y, 50, 50);
 };
 
@@ -126,7 +133,14 @@ context.fillRect(0, 0, width, height);
 context.fillStyle = "#F7FF0F";
 context.fillRect(0, 0, 50, 50);
 
-context.fillStyle = "#FF5733";
+context.fillStyle = "#800097";
 context.fillRect(localPosition.x, localPosition.y, 50, 50);
 
 document.body.insertBefore(canvas, document.body.firstChild);
+
+// Disable right-click menu
+document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+}, false);
+// Hide page scrollbars
+document.body.style.overflow = "hidden";
