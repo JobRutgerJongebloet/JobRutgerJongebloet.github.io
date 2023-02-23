@@ -133,6 +133,7 @@ const u = (e) => {
             const audioPageTurn = new Audio('/music/mixkit-page-turn-chime-1106.wav');
             audioPageTurn.volume = 0.1;
             audioPageTurn.play();
+            messageBox = "";
             clearInterval(displayInterval);
         }
     }
@@ -204,7 +205,10 @@ const keyPress = () => {
                 if (localPlayer.position.x < maxX) {
                     localPlayer.spriteArray = localPlayer.playerMovingRight;
                     localPlayer.position.x += speed;
-                }
+                } 
+                break;
+            case 'i':
+                inventoryOpen = false;
                 break;
         }
         //udpDataChannel.send(JSON.stringify({ position: localPlayer.position, key: k[0] }));
@@ -302,29 +306,69 @@ const render = () => {
     context.fillText(messageBox, width / 2, height / 2.3);
 
     if (inventoryOpen) {
-        context.font = `20px Pixel Art2`;
+        const inventoryX = window.innerWidth / 7;
+        const inventoryY = window.innerHeight / 12;
+        const inventoryWidth = window.innerWidth / 1.4;
+        const inventoryHeight = window.innerHeight / 1.2;
+
+        context.drawImage(inventory, inventoryX, inventoryY, inventoryWidth, inventoryHeight);
+
+        const lineHeight = 30;
+        let y = window.innerHeight / lineHeight / 10;
+        console.log(y);
+
         context.fillStyle = '#000000';
-        context.drawImage(inventory, window.innerWidth / 7, window.innerHeight / 12, window.innerWidth / 1.4, window.innerHeight / 1.2);
-        context.fillText("Favoriete Taal:   Javascript", window.innerWidth / 2.7, window.innerHeight / 5);
-        context.fillText("Goed met :    C# , java , html / css, python", window.innerWidth / 2.28, window.innerHeight / 4.1);
-        context.fillText("Wil alles weten over cyber-security", window.innerWidth / 2.43, window.innerHeight / 3.65);
-        context.fillText("Cloud service kennis zoals Azure", window.innerWidth / 2.55, window.innerHeight / 2.38);
-        context.fillText("Passie voor coden", window.innerWidth / 3.25, window.innerHeight / 2.2);
-        context.fillText("Passie voor games maken", window.innerWidth / 2.92, window.innerHeight / 2.05);
+        context.font = `${Math.min(window.innerWidth / 55)}px Pixel Art`;
+        context.textAlign = "left";
 
-        context.fillText("Email: jobjongebloet@gmail.com", window.innerWidth / 2.65, window.innerHeight / 1.85);
-        context.fillText("Ik ben leergierig , perfectionistisch en gezellig/leuk", window.innerWidth / 2.027, window.innerHeight / 1.745);
-        context.fillText("in teamverband", window.innerWidth / 3.45, window.innerHeight / 1.65);
+        var b = 3;
+        let i = 18.8
 
+        context.fillText("Favoriete Taal:   Javascript", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+        i--
+        context.fillText("Goed met: C#, Java, HTML/CSS, Python", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+        i--
+        i--
 
-        context.fillText("Performance applicatie verbetern:", window.innerWidth / 2.52, window.innerHeight / 1.52);
-        context.fillText("identificeren bottlenecks, optimaliseren van algoritmen", window.innerWidth / 1.97, window.innerHeight / 1.43);
-        context.fillText("gegevenstoegang, optimaliseer I/O, gebruik van datatypes", window.innerWidth / 1.95, window.innerHeight / 1.36);
-        context.fillText("geheugengebruik (memory pooling, garbage collection", window.innerWidth / 2.02, window.innerHeight / 1.3);
-        context.fillText("pipelines)", window.innerWidth / 3.82, window.innerHeight / 1.24);
+        context.fillText("Passie voor coden", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+        i--
+        context.fillText("Passie voor games maken", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+        i--
+        i--
+        context.fillText("Email: jobjongebloet@gmail.com", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+        i--
+        context.fillText("Ik ben leergierig, perfectionistisch", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+        i--
+        context.fillText("en gezellig/leuk in teamverband", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+        i--
+        i--
+        context.fillText("Performance applicatie verbetern:", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+        i--
+        context.fillText("Wil alles weten over cyber-security", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+        i--
+        context.fillText("Cloud service kennis zoals Azure", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+        i--
+        i--
+        context.fillText("Ik vind belangrijk: Performance applicatie verbetern:", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+        i--
+        context.fillText("identificeren bottlenecks, optimaliseren van algoritmen", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+        i--
+        context.fillText("gegevenstoegang, optimaliseer I/O, gebruik van datatypes", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+        i--
+        context.fillText("geheugengebruik (memory pooling, garbage collection, pipelines)", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+        i--
+        i--
+        i--
+        
+        context.fillText("Press 'I' to close", inventoryX + inventoryWidth / 2.5, inventoryY + inventoryHeight - lineHeight * (y + y / 5 * i));
+
         context.fillStyle = '#ffffff';
-        context.font = `32px Pixel Art`;
-    }
+        context.font = `${Math.min(window.innerWidth / 50)}px Pixel Art`;
+        context.textAlign = "centered";
+    } 
+
+
+
 };
 
 localPlayer.position.x = width - width + localPlayer.spriteArray[localPlayerFrameIndex].width * 4;
