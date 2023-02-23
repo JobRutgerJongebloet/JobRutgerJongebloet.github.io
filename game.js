@@ -440,4 +440,6 @@ document.addEventListener("contextmenu", function (e) {
 }, false);
 document.body.style.overflow = "hidden";
 
+requestAnimationFrame(mainAnimation);
+
 
