@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
+<script>
+   var canvas = document.createElement("canvas");
+var width = 800;
+var height = 500;
+canvas.width = width;
+canvas.height = height;
+var context = canvas.getContext('2d');
+document.body.insertBefore(canvas, document.body.firstChild);
+
+// Create three image objects for each layer
+var bgImage1 = new Image();
+bgImage1.src = '/sprites/backgrounds/background_layer_1.png';
+
+var bgImage2 = new Image();
+bgImage2.src = '/sprites/backgrounds/background_layer_2.png';
+
+var bgImage3 = new Image();
+bgImage3.src = '/sprites/backgrounds/background_layer_3.png';
+
+// Define the number of layers for the parallax effect
+var numLayers = 3;
+
+// Define the parallax ratios for each layer
+var parallaxRatios = [0.2, 0.5, 1];
+
+// Wait for all three images to load before starting the animation
+var imagesLoaded = 0;
+
+bgImage1.onload = bgImage2.onload = bgImage3.onload = function() {
+  imagesLoaded++;
+  if (imagesLoaded === numLayers) {
+    startAnimation();
+  }
+};
+
+function startAnimation() {
+  // Set the canvas dimensions to match the image dimensions
+  canvas.width = bgImage1.width;
+  canvas.height = bgImage1.height;
+
+  // Create an array to store the positions of each layer
+  var layerPositions = [];
+
+  // Initialize the layer positions to the left edge of the canvas
+  for (var i = 0; i < numLayers; i++) {
+    layerPositions.push(0);
+  }
+
+  // Define the update function for the animation
+  function update() {
+    // Clear the canvas
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Loop through each layer and update its position based on the parallax ratio
+    for (var i = 0; i < numLayers; i++) {
+      layerPositions[i] -= parallaxRatios[i];
+
+      // Wrap the layer position back to the right edge of the canvas
+      if (layerPositions[i] < -canvas.width) {
+        layerPositions[i] += canvas.width;
+      }
+
+      // Draw the layer at its current position
+      if (i === 0) {
+        context.drawImage(bgImage1, layerPositions[i], 0);
+        context.drawImage(bgImage1, layerPositions[i] + canvas.width, 0);
+      } else if (i === 1) {
+        context.drawImage(bgImage2, layerPositions[i], 0);
+        context.drawImage(bgImage2, layerPositions[i] + canvas.width, 0);
+      } else {
+        context.drawImage(bgImage3, layerPositions[i], 0);
+        context.drawImage(bgImage3, layerPositions[i] + canvas.width, 0);
+      }
+    }
+
+    // Request the next animation frame
+    requestAnimationFrame(update);
+  }
+
+  // Start the animation loop
+  update();
+}
+
+</script>
