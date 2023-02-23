@@ -225,6 +225,7 @@ let localPlayerFrameIndex = 0;
 let localPlayerLastFrameTime = 0;
 let partnerPlayerFrameIndex = 0;
 let partnerPlayerLastFrameTime = 0;
+context.textAlign = "left";
 
 const mainAnimation = (currentTime) => {
     if (currentTime - localPlayerLastFrameTime > 300) {
@@ -283,14 +284,14 @@ const render = () => {
     //context.drawImage(partnerPlayer.spriteArray[partnerPlayerFrameIndex], partnerPlayer.position.x, partnerPlayer.position.y, partnerPlayer.spriteArray[partnerPlayerFrameIndex].width * 3, partnerPlayer.spriteArray[partnerPlayerFrameIndex].height * 3);
     context.drawImage(localPlayer.spriteArray[localPlayerFrameIndex], localPlayer.position.x, localPlayer.position.y, localPlayer.spriteArray[localPlayerFrameIndex].width * 2, localPlayer.spriteArray[localPlayerFrameIndex].height * 2);
 
-    context.fillText("Welkom    in      mijn     interactieve    cv!", width / 2, height / 4.8);
+    context.fillText("Welkom   bij   mijn   interactieve   cv!", width / 4, height / 4.8);
 
     context.drawImage(keyW, width / 6 - keyA.width * 1.5, height / 1.63, 40, 40);
     context.drawImage(keyA, width / 6 - keyA.width * 3.5, height / 1.5, 40, 40);
     context.drawImage(keyS, width / 6 - keyA.width * 1.5, height / 1.5, 40, 40);
     context.drawImage(keyD, width / 6 + keyA.width * 0.5, height / 1.5, 40, 40);
 
-    context.fillText("bewegen!", width / 6, height / 1.7);
+    context.fillText("bewegen!", window.innerWidth / 10, height / 1.7);
 
     if (localPlayer.position.y < height - 24 * 3.2) {
         context.drawImage(bush, 24 * 4, height - 24 * 3.2, 50, 50);
@@ -302,8 +303,8 @@ const render = () => {
     context.drawImage(bush, 60, height - 24 * 2, 100, 100);
     context.drawImage(bush, 520, height - 24 * 2, 190, 100);
 
-    context.strokeText(messageBox, width / 2, height / 2.3);
-    context.fillText(messageBox, width / 2, height / 2.3);
+    context.strokeText(messageBox, width / 2.2, height / 2.3);
+    context.fillText(messageBox, width / 2.2, height / 2.3);
 
     if (inventoryOpen) {
         const inventoryX = window.innerWidth / 7;
@@ -319,7 +320,7 @@ const render = () => {
 
         context.fillStyle = '#000000';
         context.font = `${Math.min(window.innerWidth / 55)}px Pixel Art`;
-        context.textAlign = "left";
+        
 
         var b = 3;
         let i = 18.8
@@ -359,12 +360,12 @@ const render = () => {
         i--
         i--
         i--
-        
         context.fillText("Press 'I' to close", inventoryX + inventoryWidth / 2.5, inventoryY + inventoryHeight - lineHeight * (y + y / 5 * i));
 
         context.fillStyle = '#ffffff';
-        context.font = `${Math.min(window.innerWidth / 50)}px Pixel Art`;
-        context.textAlign = "centered";
+        var fontSize = 32;
+        var fontFamily = 'Pixel Art';
+        context.font = `${fontSize}px ${fontFamily}`;
     } 
 
 
@@ -474,7 +475,6 @@ window.addEventListener('resize', () => {
     var fontSize = 32;
     var fontFamily = 'Pixel Art';
     context.font = `${fontSize}px ${fontFamily}`;
-    context.textAlign = 'center';
     context.fillStyle = '#ffffff';
     context.strokeStyle = '#000000';
 });
