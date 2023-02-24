@@ -291,7 +291,7 @@ const render = () => {
     context.drawImage(keyS, width / 6 - keyA.width * 1.5, height / 1.5, 40, 40);
     context.drawImage(keyD, width / 6 + keyA.width * 0.5, height / 1.5, 40, 40);
 
-    context.fillText("bewegen!", window.innerWidth / 10, height / 1.7);
+    context.fillText("bewegen!", width / 6 - keyA.width * 3.5, height / 1.7);
 
     if (localPlayer.position.y < height - 24 * 3.2) {
         context.drawImage(bush, 24 * 4, height - 24 * 3.2, 50, 50);
