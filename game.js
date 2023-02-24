@@ -5,20 +5,12 @@ import Shop from './models/shop.js';
 // let udpDataChannel = peerConnection.createDataChannel("udpChannel", { ordered: false });
 // let tcpDataChannel = peerConnection.createDataChannel("tcpChannel");
 
-var canvas = document.createElement("canvas");
-var width = window.innerWidth;
-var height = window.innerHeight;
-canvas.width = width;
-canvas.height = height;
-var context = canvas.getContext('2d');
-document.body.insertBefore(canvas, document.body.firstChild);
-
 const localPlayer = new Player();
 const partnerPlayer = new Player();
-
 const shop = new Shop();
-shop.position.x = width / 2;
-shop.position.y = height - 290;
+
+var width = window.innerWidth;
+var height = window.innerHeight;
 
 // let createOffer = () => {
 //     peerConnection.onicecandidate = e => {if (e.candidate === null) document.getElementById('offer-sdp').value = JSON.stringify(peerConnection.localDescription)};
@@ -112,15 +104,6 @@ shop.position.y = height - 290;
 // document.getElementById('create-offer').addEventListener('click', createOffer);
 // document.getElementById('create-answer').addEventListener('click', createAnswer);
 // document.getElementById('add-answer').addEventListener('click', addAnswer);
-
-var fontSize = 32;
-var fontFamily = 'Pixel Art';
-context.font = `${fontSize}px ${fontFamily}`;
-context.textAlign = 'center';
-context.fillStyle = '#ffffff';
-context.strokeStyle = '#000000';
-context.lineWidth = 4;
-
 var inventoryOpen = false;
 
 let keys = [];
@@ -225,155 +208,6 @@ let localPlayerFrameIndex = 0;
 let localPlayerLastFrameTime = 0;
 let partnerPlayerFrameIndex = 0;
 let partnerPlayerLastFrameTime = 0;
-context.textAlign = "left";
-
-const mainAnimation = (currentTime) => {
-    if (currentTime - localPlayerLastFrameTime > 300) {
-        localPlayerFrameIndex = (localPlayerFrameIndex + 1) % localPlayer.spriteArray.length;
-        localPlayerLastFrameTime = currentTime;
-    }
-    if (currentTime - partnerPlayerLastFrameTime > 310) {
-        partnerPlayerFrameIndex = (partnerPlayerFrameIndex + 1) % partnerPlayer.spriteArray.length;
-        partnerPlayerLastFrameTime = currentTime;
-    }
-    keyPress();
-    render();
-    requestAnimationFrame(mainAnimation);
-};
-
-const render = () => {
-    context.clearRect(0, 0, width, height - 48);
-
-    // Draw the three background layers with parallax effect
-    for (let i = 0; i < 3; i++) {
-        // Define the parallax ratio for each layer
-        const parallaxRatio = 0.1 * (i + 1);
-        let layerX = 0;
-
-        if (i < 2) {
-            // Apply parallax effect to layers other than the first one
-            layerX = -(localPlayer.position.x * parallaxRatio);
-        }
-
-        context.drawImage(bgImages[i], layerX, 0, width, height - 48);
-        context.drawImage(bgImages[i], layerX + width, 0, width, height - 48);
-    }
-    for (let i = 0; i < width / 24; i++) {
-        context.drawImage(ground, 24 * i, height - 24, 24, 24);
-        context.drawImage(ground, 24 * i, height - 24 * 2, 24, 24);
-    }
-
-    // for (let i = 0; i < width / 24; i++) {
-    //     context.drawImage(down, 24 * i, height - 24, 24, 24);
-    //     if (randomTileArray[i] === 0) {
-    //         context.drawImage(up1, 24 * i, height - 48, 24, 24);
-    //     } else {
-    //         context.drawImage(up2, 24 * i, height - 48, 24, 24);
-    //     }
-    // }
-
-    context.drawImage(shop.spriteArray[localPlayerFrameIndex], shop.position.x, shop.position.y, shop.spriteArray[localPlayerFrameIndex].width * 1.8, shop.spriteArray[localPlayerFrameIndex].height * 1.8);
-
-    if (localPlayer.position.y > height - 24 * 3.2) {
-        context.drawImage(bush, 24 * 4, height - 24 * 3.2, 50, 50);
-    }
-    if (localPlayer.position.y > height - 24 * 2.6) {
-        context.drawImage(bush, 24 * 10, height - 24 * 2.6, 75, 50);
-    }
-
-    //context.drawImage(partnerPlayer.spriteArray[partnerPlayerFrameIndex], partnerPlayer.position.x, partnerPlayer.position.y, partnerPlayer.spriteArray[partnerPlayerFrameIndex].width * 3, partnerPlayer.spriteArray[partnerPlayerFrameIndex].height * 3);
-    context.drawImage(localPlayer.spriteArray[localPlayerFrameIndex], localPlayer.position.x, localPlayer.position.y, localPlayer.spriteArray[localPlayerFrameIndex].width * 2, localPlayer.spriteArray[localPlayerFrameIndex].height * 2);
-
-    context.fillText("Welkom   bij   mijn   interactieve   cv!", width / 4, height / 4.8);
-
-    context.drawImage(keyW, width / 6 - keyA.width * 1.5, height / 1.63, 40, 40);
-    context.drawImage(keyA, width / 6 - keyA.width * 3.5, height / 1.5, 40, 40);
-    context.drawImage(keyS, width / 6 - keyA.width * 1.5, height / 1.5, 40, 40);
-    context.drawImage(keyD, width / 6 + keyA.width * 0.5, height / 1.5, 40, 40);
-
-    context.fillText("bewegen!", width / 6 - keyA.width * 3.5, height / 1.7);
-
-    if (localPlayer.position.y < height - 24 * 3.2) {
-        context.drawImage(bush, 24 * 4, height - 24 * 3.2, 50, 50);
-    }
-    if (localPlayer.position.y < height - 24 * 2.6) {
-        context.drawImage(bush, 24 * 10, height - 24 * 2.6, 75, 50);
-    }
-
-    context.drawImage(bush, 60, height - 24 * 2, 100, 100);
-    context.drawImage(bush, 520, height - 24 * 2, 190, 100);
-
-    context.strokeText(messageBox, width / 2.2, height / 2.3);
-    context.fillText(messageBox, width / 2.2, height / 2.3);
-
-    if (inventoryOpen) {
-        const inventoryX = window.innerWidth / 7;
-        const inventoryY = window.innerHeight / 12;
-        const inventoryWidth = window.innerWidth / 1.4;
-        const inventoryHeight = window.innerHeight / 1.2;
-
-        context.drawImage(inventory, inventoryX, inventoryY, inventoryWidth, inventoryHeight);
-
-        const lineHeight = 30;
-        let y = window.innerHeight / lineHeight / 10;
-        console.log(y);
-
-        context.fillStyle = '#000000';
-        context.font = `${Math.min(window.innerWidth / 55)}px Pixel Art`;
-        
-
-        var b = 3;
-        let i = 18.8
-
-        context.fillText("Favoriete Taal:   Javascript", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
-        i--
-        context.fillText("Goed met: C#, Java, HTML/CSS, Python", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
-        i--
-        i--
-
-        context.fillText("Passie voor coden", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
-        i--
-        context.fillText("Passie voor games maken", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
-        i--
-        i--
-        context.fillText("Email: jobjongebloet@gmail.com", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
-        i--
-        context.fillText("Ik ben leergierig, perfectionistisch", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
-        i--
-        context.fillText("en gezellig/leuk in teamverband", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
-        i--
-        i--
-        context.fillText("Performance applicatie verbetern:", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
-        i--
-        context.fillText("Wil alles weten over cyber-security", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
-        i--
-        context.fillText("Cloud service kennis zoals Azure", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
-        i--
-        i--
-        context.fillText("Ik vind belangrijk: Performance applicatie verbetern:", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
-        i--
-        context.fillText("identificeren bottlenecks, optimaliseren van algoritmen", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
-        i--
-        context.fillText("gegevenstoegang, optimaliseer I/O, gebruik van datatypes", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
-        i--
-        context.fillText("geheugengebruik (memory pooling, garbage collection, pipelines)", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
-        i--
-        i--
-        i--
-        context.fillText("Press 'I' to close", inventoryX + inventoryWidth / 2.5, inventoryY + inventoryHeight - lineHeight * (y + y / 5 * i));
-
-        context.fillStyle = '#ffffff';
-        var fontSize = 32;
-        var fontFamily = 'Pixel Art';
-        context.font = `${fontSize}px ${fontFamily}`;
-    } 
-
-
-
-};
-
-localPlayer.position.x = width - width + localPlayer.spriteArray[localPlayerFrameIndex].width * 4;
-localPlayer.position.y = height - localPlayer.spriteArray[localPlayerFrameIndex].height * 3;
 
 const audioWInd = new Audio('/music/wind-3.mp3');
 audioWInd.volume = 0.05;
@@ -389,7 +223,7 @@ for (let i = 1; i <= numLayers; i++) {
         numImagesLoaded++;
         if (numImagesLoaded === numLayers) {
             // Start the animation loop when all images are loaded
-            mainAnimation();
+           // mainAnimation();
         }
     };
     bgImages.push(bgImage);
@@ -484,6 +318,187 @@ document.addEventListener("contextmenu", function (e) {
 }, false);
 document.body.style.overflow = "hidden";
 
-requestAnimationFrame(mainAnimation);
+
+
+
+function renderPlayerWhenLoaded(player) {
+    const firstImage = player.spriteArray[0];
+    console.log("hoi");
+    if (firstImage.complete) {
+        console.log("hoii");
+        context.drawImage(firstImage, player.position.x, player.position.y, firstImage.width * 2, firstImage.height * 2);
+    } else {
+        firstImage.addEventListener('load', () => {
+            const mainAnimation = (currentTime) => {
+                if (currentTime - localPlayerLastFrameTime > 300) {
+                    localPlayerFrameIndex = (localPlayerFrameIndex + 1) % localPlayer.spriteArray.length;
+                    localPlayerLastFrameTime = currentTime;
+                }
+                if (currentTime - partnerPlayerLastFrameTime > 310) {
+                    partnerPlayerFrameIndex = (partnerPlayerFrameIndex + 1) % partnerPlayer.spriteArray.length;
+                    partnerPlayerLastFrameTime = currentTime;
+                }
+                keyPress();
+                render();
+                requestAnimationFrame(mainAnimation);
+            };
+
+            const render = () => {
+                context.clearRect(0, 0, width, height - 48);
+            
+                // Draw the three background layers with parallax effect
+                for (let i = 0; i < 3; i++) {
+                    // Define the parallax ratio for each layer
+                    const parallaxRatio = 0.1 * (i + 1);
+                    let layerX = 0;
+            
+                    if (i < 2) {
+                        // Apply parallax effect to layers other than the first one
+                        layerX = -(localPlayer.position.x * parallaxRatio);
+                    }
+            
+                    context.drawImage(bgImages[i], layerX, 0, width, height - 48);
+                    context.drawImage(bgImages[i], layerX + width, 0, width, height - 48);
+                }
+                for (let i = 0; i < width / 24; i++) {
+                    context.drawImage(ground, 24 * i, height - 24, 24, 24);
+                    context.drawImage(ground, 24 * i, height - 24 * 2, 24, 24);
+                }
+            
+                // for (let i = 0; i < width / 24; i++) {
+                //     context.drawImage(down, 24 * i, height - 24, 24, 24);
+                //     if (randomTileArray[i] === 0) {
+                //         context.drawImage(up1, 24 * i, height - 48, 24, 24);
+                //     } else {
+                //         context.drawImage(up2, 24 * i, height - 48, 24, 24);
+                //     }
+                // }
+            
+                context.drawImage(shop.spriteArray[localPlayerFrameIndex], shop.position.x, shop.position.y, shop.spriteArray[localPlayerFrameIndex].width * 1.8, shop.spriteArray[localPlayerFrameIndex].height * 1.8);
+            
+                if (localPlayer.position.y > height - 24 * 3.2) {
+                    context.drawImage(bush, 24 * 4, height - 24 * 3.2, 50, 50);
+                }
+                if (localPlayer.position.y > height - 24 * 2.6) {
+                    context.drawImage(bush, 24 * 10, height - 24 * 2.6, 75, 50);
+                }
+            
+                //context.drawImage(partnerPlayer.spriteArray[partnerPlayerFrameIndex], partnerPlayer.position.x, partnerPlayer.position.y, partnerPlayer.spriteArray[partnerPlayerFrameIndex].width * 3, partnerPlayer.spriteArray[partnerPlayerFrameIndex].height * 3);
+                context.drawImage(localPlayer.spriteArray[localPlayerFrameIndex], localPlayer.position.x, localPlayer.position.y, localPlayer.spriteArray[localPlayerFrameIndex].width * 2, localPlayer.spriteArray[localPlayerFrameIndex].height * 2);
+            
+                context.fillText("Welkom   bij   mijn   interactieve   cv!", width / 4, height / 4.8);
+            
+                context.drawImage(keyW, width / 6 - keyA.width * 1.5, height / 1.63, 40, 40);
+                context.drawImage(keyA, width / 6 - keyA.width * 3.5, height / 1.5, 40, 40);
+                context.drawImage(keyS, width / 6 - keyA.width * 1.5, height / 1.5, 40, 40);
+                context.drawImage(keyD, width / 6 + keyA.width * 0.5, height / 1.5, 40, 40);
+            
+                context.fillText("bewegen!", width / 6 - keyA.width * 3.5, height / 1.7);
+            
+                if (localPlayer.position.y < height - 24 * 3.2) {
+                    context.drawImage(bush, 24 * 4, height - 24 * 3.2, 50, 50);
+                }
+                if (localPlayer.position.y < height - 24 * 2.6) {
+                    context.drawImage(bush, 24 * 10, height - 24 * 2.6, 75, 50);
+                }
+            
+                context.drawImage(bush, 60, height - 24 * 2, 100, 100);
+                context.drawImage(bush, 520, height - 24 * 2, 190, 100);
+            
+                context.strokeText(messageBox, width / 2.2, height / 2.3);
+                context.fillText(messageBox, width / 2.2, height / 2.3);
+            
+                if (inventoryOpen) {
+                    const inventoryX = window.innerWidth / 7;
+                    const inventoryY = window.innerHeight / 12;
+                    const inventoryWidth = window.innerWidth / 1.4;
+                    const inventoryHeight = window.innerHeight / 1.2;
+            
+                    context.drawImage(inventory, inventoryX, inventoryY, inventoryWidth, inventoryHeight);
+            
+                    const lineHeight = 30;
+                    let y = window.innerHeight / lineHeight / 10;
+                    console.log(y);
+            
+                    context.fillStyle = '#000000';
+                    context.font = `${Math.min(window.innerWidth / 55)}px Pixel Art`;
+                    
+            
+                    var b = 3;
+                    let i = 18.8
+            
+                    context.fillText("Favoriete Taal:   Javascript", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+                    i--
+                    context.fillText("Goed met: C#, Java, HTML/CSS, Python", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+                    i--
+                    i--
+            
+                    context.fillText("Passie voor coden", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+                    i--
+                    context.fillText("Passie voor games maken", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+                    i--
+                    i--
+                    context.fillText("Email: jobjongebloet@gmail.com", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+                    i--
+                    context.fillText("Ik ben leergierig, perfectionistisch", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+                    i--
+                    context.fillText("en gezellig/leuk in teamverband", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+                    i--
+                    i--
+                    context.fillText("Performance applicatie verbetern:", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+                    i--
+                    context.fillText("Wil alles weten over cyber-security", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+                    i--
+                    context.fillText("Cloud service kennis zoals Azure", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+                    i--
+                    i--
+                    context.fillText("Ik vind belangrijk: Performance applicatie verbetern:", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+                    i--
+                    context.fillText("identificeren bottlenecks, optimaliseren van algoritmen", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+                    i--
+                    context.fillText("gegevenstoegang, optimaliseer I/O, gebruik van datatypes", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+                    i--
+                    context.fillText("geheugengebruik (memory pooling, garbage collection, pipelines)", inventoryX + inventoryWidth / 8.5, inventoryY + inventoryHeight - lineHeight * (y + y / b * i));
+                    i--
+                    i--
+                    i--
+                    context.fillText("Press 'I' to close", inventoryX + inventoryWidth / 2.5, inventoryY + inventoryHeight - lineHeight * (y + y / 5 * i));
+            
+                    context.fillStyle = '#ffffff';
+                    var fontSize = 32;
+                    var fontFamily = 'Pixel Art';
+                    context.font = `${fontSize}px ${fontFamily}`;
+                } 
+            
+            
+            
+            };
+
+            var canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            var context = canvas.getContext('2d');
+            var fontSize = 32;
+            var fontFamily = 'Pixel Art';
+            context.font = `${fontSize}px ${fontFamily}`;
+            context.fillStyle = '#ffffff';
+            context.strokeStyle = '#000000';
+            context.lineWidth = 4;
+            context.textAlign = "left";
+            document.body.insertBefore(canvas, document.body.firstChild);
+
+            localPlayer.position.x = width - width + localPlayer.spriteArray[localPlayerFrameIndex].width * 4;
+            localPlayer.position.y = height - localPlayer.spriteArray[localPlayerFrameIndex].height * 3;
+
+            shop.position.x = width / 2;
+            shop.position.y = height - 290;
+            requestAnimationFrame(mainAnimation);
+        });
+    }
+}
+
+renderPlayerWhenLoaded(localPlayer);
+
+
 
 
