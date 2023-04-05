@@ -12,6 +12,8 @@ const shop = new Shop();
 var width = window.innerWidth;
 var height = window.innerHeight;
 
+
+
 // let createOffer = () => {
 //     peerConnection.onicecandidate = e => {if (e.candidate === null) document.getElementById('offer-sdp').value = JSON.stringify(peerConnection.localDescription)};
 //     udpDataChannel.onmessage = e => {
@@ -120,6 +122,12 @@ const u = (e) => {
             clearInterval(displayInterval);
         }
     }
+
+    if (e.key === 'b') {
+        clearInterval(displayInterval);
+        window.open('/blog001.html');
+    }
+
     const i = keys.indexOf(e.key); i !== -1 && keys.splice(i, 1)
     //tcpDataChannel.send(JSON.stringify({ keyIsDown: true }));
 };
@@ -267,6 +275,7 @@ const render = () => {
     context.drawImage(localPlayer.spriteArray[localPlayerFrameIndex], localPlayer.position.x, localPlayer.position.y, localPlayer.spriteArray[localPlayerFrameIndex].width * 2, localPlayer.spriteArray[localPlayerFrameIndex].height * 2);
 
     context.fillText("Welkom   bij   mijn   interactieve   cv!", width / 4, height / 4.8);
+    context.fillText("Voor  mijn    blog    druk    op  B!", width / 4, height / 4);
 
     context.drawImage(keyW, width / 6 - keyA.width * 1.5, height / 1.63, 40, 40);
     context.drawImage(keyA, width / 6 - keyA.width * 3.5, height / 1.5, 40, 40);
@@ -362,14 +371,6 @@ let numImagesLoaded = 0;
 for (let i = 1; i <= numLayers; i++) {
     const bgImage = new Image();
     bgImage.src = `/sprites/backgrounds/layers/background_layer_${i}.png`;
-
-    bgImage.onload = function () {
-        numImagesLoaded++;
-        if (numImagesLoaded === numLayers) {
-            // Start the animation loop when all images are loaded
-
-        }
-    };
     bgImages.push(bgImage);
 }
 
@@ -489,14 +490,18 @@ function renderPlayerWhenLoaded(player) {
     if (firstImage.complete) {
         console.log("hoii");
         context.drawImage(firstImage, player.position.x, player.position.y, firstImage.width * 2, firstImage.height * 2);
+        mainAnimation(); // Call mainAnimation() here if the sprite is already loaded
     } else {
         firstImage.addEventListener('load', () => {
-            mainAnimation();
+            console.log("sprite loaded");
+            context.drawImage(firstImage, player.position.x, player.position.y, firstImage.width * 2, firstImage.height * 2);
+            mainAnimation(); // Call mainAnimation() here when the sprite is loaded
         });
     }
 }
 
 renderPlayerWhenLoaded(localPlayer);
+
 
 
 
